@@ -1,6 +1,8 @@
 import { fileURLToPath, URL } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
@@ -9,6 +11,20 @@ export default defineConfig(({ mode, command }) => {
     plugins: [
       vue(),
       tailwindcss(),
+      AutoImport({
+        imports: ['vue', 'vue-router', 'pinia'],
+        dirs: ['src/composables', 'src/stores', 'src/utils'],
+        dts: false,
+        eslintrc: {
+          enabled: false, // ← 建议先关掉，后面需要再开
+        },
+        vueTemplate: true,
+      }),
+      Components({
+        dirs: ['src/components'],
+        extensions: ['vue'],
+        dts: false,
+      }),
     ],
     css: {
       preprocessorOptions: {
