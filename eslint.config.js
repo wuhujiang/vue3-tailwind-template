@@ -26,5 +26,12 @@ export default antfu({
   rules: {
     'no-console': 'off',
     'style/brace-style': 'off',
+    'depend/ban-dependencies': ['error', {
+      presets: ['native'],
+      allowList: [
+        'axios',
+        'msw',
+      ],
+    }],
   },
 });

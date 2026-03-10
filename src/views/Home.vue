@@ -12,6 +12,47 @@
         Decrement
       </button>
     </div>
+
+    <!-- MSW测试请求 -->
+    <div class="msw-test">
+      <h2>MSW测试请求</h2>
+      <div class="buttons">
+        <button @click="testGetRequest" :disabled="loading.get">
+          {{ loading.get ? '请求中...' : '测试GET请求' }}
+        </button>
+        <button @click="testPostRequest" :disabled="loading.post">
+          {{ loading.post ? '请求中...' : '测试POST请求' }}
+        </button>
+        <button @click="testUserReportList" :disabled="loading.report">
+          {{ loading.report ? '请求中...' : '测试getUserReportList' }}
+        </button>
+      </div>
+      
+      <!-- GET请求结果 -->
+      <div v-if="getResponse" class="response">
+        <h3>GET请求结果:</h3>
+        <pre>{{ JSON.stringify(getResponse, null, 2) }}</pre>
+      </div>
+      
+      <!-- POST请求结果 -->
+      <div v-if="postResponse" class="response">
+        <h3>POST请求结果:</h3>
+        <pre>{{ JSON.stringify(postResponse, null, 2) }}</pre>
+      </div>
+      
+      <!-- getUserReportList请求结果 -->
+      <div v-if="reportResponse" class="response">
+        <h3>getUserReportList请求结果:</h3>
+        <pre>{{ JSON.stringify(reportResponse, null, 2) }}</pre>
+      </div>
+      
+      <!-- 错误信息 -->
+      <div v-if="error" class="error">
+        <h3>错误信息:</h3>
+        <p>{{ error }}</p>
+      </div>
+    </div>
+
     <!-- 使用自动注册的组件 -->
     <TestComponent />
     <router-link to="/about">
@@ -21,9 +62,68 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useCounterStore } from '../stores/counter';
+import { getUserReportList } from '../api/about';
+import { testGet, testPost } from '../api/test';
 
 const counter = useCounterStore();
+
+// 状态管理
+const getResponse = ref(null);
+const postResponse = ref(null);
+const reportResponse = ref(null);
+const error = ref(null);
+const loading = ref({ get: false, post: false, report: false });
+
+// 测试GET请求
+async function testGetRequest() {
+  loading.value.get = true;
+  error.value = null;
+  try {
+    const response = await testGet();
+    getResponse.value = response;
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value.get = false;
+  }
+}
+
+// 测试POST请求
+async function testPostRequest() {
+  loading.value.post = true;
+  error.value = null;
+  try {
+    const response = await testPost({
+      name: '测试POST数据',
+      value: 456,
+      timestamp: new Date().toISOString()
+    });
+    postResponse.value = response;
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value.post = false;
+  }
+}
+
+// 测试getUserReportList API
+async function testUserReportList() {
+  loading.value.report = true;
+  error.value = null;
+  try {
+    const response = await getUserReportList({
+      page: 1,
+      pageSize: 10
+    });
+    reportResponse.value = response;
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value.report = false;
+  }
+}
 </script>
 
 <style scoped>
@@ -38,6 +138,17 @@ const counter = useCounterStore();
   border-radius: 8px;
 }
 
+.msw-test {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.buttons {
+  margin: 10px 0;
+}
+
 button {
   margin: 0 10px;
   padding: 5px 10px;
@@ -46,5 +157,32 @@ button {
   color: #fff;
   border: none;
   border-radius: 4px;
+}
+
+button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.response {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.error {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
+}
+
+pre {
+  margin: 0;
+  font-family: monospace;
+  white-space: pre-wrap;
 }
 </style>
