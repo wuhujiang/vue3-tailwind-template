@@ -17,35 +17,35 @@
     <div class="msw-test">
       <h2>MSW测试请求</h2>
       <div class="buttons">
-        <button @click="testGetRequest" :disabled="loading.get">
+        <button :disabled="loading.get" @click="testGetRequest">
           {{ loading.get ? '请求中...' : '测试GET请求' }}
         </button>
-        <button @click="testPostRequest" :disabled="loading.post">
+        <button :disabled="loading.post" @click="testPostRequest">
           {{ loading.post ? '请求中...' : '测试POST请求' }}
         </button>
-        <button @click="testUserReportList" :disabled="loading.report">
+        <button :disabled="loading.report" @click="testUserReportList">
           {{ loading.report ? '请求中...' : '测试getUserReportList' }}
         </button>
       </div>
-      
+
       <!-- GET请求结果 -->
       <div v-if="getResponse" class="response">
         <h3>GET请求结果:</h3>
         <pre>{{ JSON.stringify(getResponse, null, 2) }}</pre>
       </div>
-      
+
       <!-- POST请求结果 -->
       <div v-if="postResponse" class="response">
         <h3>POST请求结果:</h3>
         <pre>{{ JSON.stringify(postResponse, null, 2) }}</pre>
       </div>
-      
+
       <!-- getUserReportList请求结果 -->
       <div v-if="reportResponse" class="response">
         <h3>getUserReportList请求结果:</h3>
         <pre>{{ JSON.stringify(reportResponse, null, 2) }}</pre>
       </div>
-      
+
       <!-- 错误信息 -->
       <div v-if="error" class="error">
         <h3>错误信息:</h3>
@@ -63,9 +63,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useCounterStore } from '../stores/counter';
 import { getUserReportList } from '../api/about';
 import { testGet, testPost } from '../api/test';
+import { useCounterStore } from '../stores/counter';
 
 const counter = useCounterStore();
 
@@ -98,7 +98,7 @@ async function testPostRequest() {
     const response = await testPost({
       name: '测试POST数据',
       value: 456,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
     postResponse.value = response;
   } catch (err) {
@@ -115,7 +115,7 @@ async function testUserReportList() {
   try {
     const response = await getUserReportList({
       page: 1,
-      pageSize: 10
+      pageSize: 10,
     });
     reportResponse.value = response;
   } catch (err) {
