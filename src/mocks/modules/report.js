@@ -6,6 +6,7 @@ export const report = [
   http.get(`${BASE_URL}/api/test`, () => {
     return HttpResponse.json(
       {
+        code: '00000',
         message: 'GET请求成功',
         data: {
           id: 1,
@@ -13,7 +14,7 @@ export const report = [
           value: 123,
         },
       },
-      { code: 200 },
+      { status: 200 },
     );
   }),
 
@@ -21,13 +22,14 @@ export const report = [
     const data = await request.json();
     return HttpResponse.json(
       {
+        code: '00000',
         message: 'POST请求成功',
         data: {
           ...data,
           id: Date.now(),
         },
       },
-      { code: 201 },
+      { status: 201 },
     );
   }),
 
@@ -35,7 +37,7 @@ export const report = [
     const data = await request.json();
     return HttpResponse.json(
       {
-        code: 200,
+        code: '00000',
         message: '获取报告列表成功',
         data: {
           list: [
@@ -57,7 +59,7 @@ export const report = [
           pageSize: data.pageSize || 10,
         },
       },
-      { code: 200 },
+      { status: 200 },
     );
   }),
 ];
