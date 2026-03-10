@@ -23,15 +23,14 @@ export default antfu({
     yaml: true,
     markdown: true,
   },
+  ignores: [
+    'public/mockServiceWorker.js',
+    'node_modules',
+    'dist',
+  ],
   rules: {
     'no-console': 'off',
     'style/brace-style': 'off',
-    'depend/ban-dependencies': ['error', {
-      presets: ['native'],
-      allowList: [
-        'axios',
-        'msw',
-      ],
-    }],
+    'e18e/ban-dependencies': 'off',
   },
 });

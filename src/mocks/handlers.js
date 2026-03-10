@@ -1,4 +1,3 @@
+import { report } from './modules/report.js';
 
-import {report} from './modules/report.js'
-
-export const handlers = [...report]
+export const handlers = [...report];

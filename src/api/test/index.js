@@ -4,7 +4,7 @@ import api from '../axios';
 export function testGet() {
   return api({
     url: '/api/test',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -13,6 +13,6 @@ export function testPost(data) {
   return api({
     url: '/api/test',
     method: 'post',
-    data
+    data,
   });
 }
